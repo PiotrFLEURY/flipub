@@ -1,14 +1,18 @@
 import 'package:epubx/epubx.dart';
 import 'package:flipub/views/chapter_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BookView extends StatelessWidget {
+class BookView extends ConsumerWidget {
   final EpubBook book;
 
-  const BookView({super.key, required this.book});
+  const BookView({
+    super.key,
+    required this.book,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(book.Title ?? 'Unknown title'),
@@ -21,9 +25,8 @@ class BookView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChapterView(
-                    chapter: book.Chapters![index],
-                  ),
+                  builder: (context) =>
+                      ChapterView(chapter: book.Chapters![index]),
                 ),
               );
             },
