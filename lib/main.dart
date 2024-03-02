@@ -1,12 +1,15 @@
 import 'package:flipub/book_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flipub/app.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+Future<void> main() async {
   final BookService bookService = BookService();
   runApp(
-    Flipub(
-      bookService: bookService,
+    ProviderScope(
+      child: Flipub(
+        bookService: bookService,
+      ),
     ),
   );
 }

@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:epubx/epubx.dart';
+import 'package:flipub/app.dart';
+import 'package:flipub/providers/preferences_provider.dart';
 import 'package:flipub/views/audio_book.dart';
 import 'package:flipub/views/linear_pogress_listener.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ChapterView extends StatefulWidget {
+class ChapterView extends ConsumerWidget {
   const ChapterView({
     super.key,
     required this.chapter,
@@ -13,17 +20,51 @@ class ChapterView extends StatefulWidget {
   final EpubChapter chapter;
 
   @override
-  State<ChapterView> createState() => _ChapterViewState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final preferences = ref.watch(preferencesProvider);
+    return preferences.when(
+      data: (sharedPreferences) {
+        return _ChapterViewInternal(
+          chapter: chapter,
+          sharedPreferences: sharedPreferences,
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (error, stackTrace) {
+        debugPrint('Error: $error');
+        return const Center(
+          child: Text('Error loading preferences'),
+        );
+      },
+    );
+  }
 }
 
-class _ChapterViewState extends State<ChapterView> {
+class _ChapterViewInternal extends ConsumerStatefulWidget {
+  const _ChapterViewInternal({
+    required this.chapter,
+    required this.sharedPreferences,
+  });
+
+  final EpubChapter chapter;
+  final SharedPreferences sharedPreferences;
+
+  @override
+  ConsumerState<_ChapterViewInternal> createState() => _ChapterViewState();
+}
+
+class _ChapterViewState extends ConsumerState<_ChapterViewInternal> {
   final scrollController = ScrollController();
   final progressController = LinearProgressController();
   double progress = 0;
+  double fontSize = 16;
 
   @override
   void initState() {
     super.initState();
+    fontSize =
+        widget.sharedPreferences.getDouble(sharedPreferencesFontSizeKey) ??
+            fontSize;
     scrollController.addListener(() {
       final maxScroll = scrollController.position.maxScrollExtent;
       final currentScroll = scrollController.position.pixels;
@@ -37,12 +78,30 @@ class _ChapterViewState extends State<ChapterView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.chapter.Title ?? 'Unknown title'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.text_decrease_sharp),
+            iconSize: 16,
+            onPressed: _decreaseFontSize,
+          ),
+          Text(fontSize.toInt().toString()),
+          IconButton(
+            icon: const Icon(Icons.text_increase_sharp),
+            onPressed: _increaseFontSize,
+          ),
+          const SizedBox(width: 24),
+        ],
       ),
       body: SingleChildScrollView(
         controller: scrollController,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Html(
+            style: {
+              'body': Style(
+                fontSize: FontSize(fontSize),
+              ),
+            },
             data: widget.chapter.HtmlContent,
           ),
         ),
@@ -51,22 +110,43 @@ class _ChapterViewState extends State<ChapterView> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          AudioBook(
-            htmlContent: widget.chapter.HtmlContent,
-            onProgress: (progress) {
-              debugPrint('Progress: $progress');
-              scrollController.animateTo(
-                progress * scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeIn,
-              );
-            },
-          ),
+          if (kIsWeb || Platform.isAndroid || Platform.isIOS)
+            AudioBook(
+              htmlContent: widget.chapter.HtmlContent,
+              onProgress: (progress) {
+                debugPrint('Progress: $progress');
+                scrollController.animateTo(
+                  progress * scrollController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeIn,
+                );
+              },
+            ),
           LinearProgressListener(
             controller: progressController,
           ),
         ],
       ),
     );
+  }
+
+  void _decreaseFontSize() {
+    setState(() {
+      fontSize = fontSize - 1;
+      widget.sharedPreferences.setDouble(
+        sharedPreferencesFontSizeKey,
+        fontSize,
+      );
+    });
+  }
+
+  void _increaseFontSize() {
+    setState(() {
+      fontSize = fontSize + 1;
+      widget.sharedPreferences.setDouble(
+        sharedPreferencesFontSizeKey,
+        fontSize,
+      );
+    });
   }
 }
