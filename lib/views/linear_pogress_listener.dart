@@ -4,7 +4,6 @@ class LinearProgressController {
   LinearProgressController();
 
   void Function(double) onProgress = (double progress) {};
-
 }
 
 class LinearProgressListener extends StatefulWidget {
@@ -14,7 +13,6 @@ class LinearProgressListener extends StatefulWidget {
   });
 
   final LinearProgressController controller;
-
 
   @override
   State<LinearProgressListener> createState() => _LinearProgressListenerState();
