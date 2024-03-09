@@ -3,11 +3,18 @@ import 'package:flipub/views/library_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Flipub extends ConsumerWidget {
+class Flipub extends StatelessWidget {
   const Flipub({
     super.key,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(child: _FlipubContent());
+  }
+}
+
+class _FlipubContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeNotifierProvider);
