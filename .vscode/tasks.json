@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "generate sources",
+            "type": "shell",
+            "command": "dart run build_runner build",
+            "problemMatcher": []
+        }
+    ]
+}

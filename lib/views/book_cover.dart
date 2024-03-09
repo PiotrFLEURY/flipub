@@ -26,7 +26,12 @@ class BookCover extends StatelessWidget {
             height: 200,
             width: 200,
             child: Center(
-              child: Text('No cover'),
+              child: Text(
+                'No cover',
+                style: TextStyle(
+                  fontSize: 42,
+                ),
+              ),
             ),
           );
   }
