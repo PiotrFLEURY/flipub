@@ -4,6 +4,7 @@ import 'package:epubx/epubx.dart' show EpubBook;
 import 'package:flipub/data/book_library.dart';
 import 'package:flipub/providers/book_provider.dart';
 import 'package:flipub/providers/library_provider.dart';
+import 'package:flipub/providers/theme_provider.dart';
 import 'package:flipub/views/book_cover.dart';
 import 'package:flipub/views/book_view.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class LibrayView extends ConsumerWidget {
   }
 }
 
-class _LibraryViewContent extends StatelessWidget {
+class _LibraryViewContent extends ConsumerWidget {
   final BookLibrary library;
 
   const _LibraryViewContent({
@@ -39,10 +40,23 @@ class _LibraryViewContent extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              currentTheme == ThemeMode.dark
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+            ),
+            onPressed: () {
+              ref.read(themeNotifierProvider.notifier).toggle();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(48.0),
@@ -113,15 +127,15 @@ class _LibraryTileContent extends StatelessWidget {
             ),
           );
         },
-        child: Card(
-          child: FittedBox(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                BookCover(book: book),
-                Text(book.Title ?? 'Unknown title'),
-              ],
-            ),
+        child: FittedBox(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              BookCover(book: book),
+              Text(
+                book.Title ?? 'Unknown title',
+              ),
+            ],
           ),
         ),
       ),

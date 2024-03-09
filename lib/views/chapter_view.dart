@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:epubx/epubx.dart';
-import 'package:flipub/app.dart';
+import 'package:flipub/data/constants.dart';
 import 'package:flipub/providers/preferences_provider.dart';
 import 'package:flipub/views/audio_book.dart';
 import 'package:flipub/views/linear_pogress_listener.dart';
@@ -95,7 +95,10 @@ class _ChapterViewState extends ConsumerState<_ChapterViewInternal> {
       body: SingleChildScrollView(
         controller: scrollController,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 16,
+          ),
           child: Html(
             style: {
               'body': Style(
