@@ -1,5 +1,5 @@
 import 'package:flipub/data/constants.dart';
-import 'package:flipub/providers/preferences_provider.dart';
+import 'package:flipub/providers/preferences/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

@@ -1,5 +1,5 @@
-import 'package:flipub/providers/theme_provider.dart';
-import 'package:flipub/views/library_view.dart';
+import 'package:flipub/providers/theme/theme_provider.dart';
+import 'package:flipub/presentation/library/library_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

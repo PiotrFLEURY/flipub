@@ -1,7 +1,7 @@
 import 'package:epubx/epubx.dart';
 import 'package:flipub/data/constants.dart';
-import 'package:flipub/providers/book_provider.dart';
-import 'package:flipub/views/chapter_view.dart';
+import 'package:flipub/providers/epub/book_provider.dart';
+import 'package:flipub/presentation/chapter/chapter_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
