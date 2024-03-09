@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:epubx/epubx.dart';
 import 'package:flipub/data/constants.dart';
-import 'package:flipub/providers/preferences_provider.dart';
-import 'package:flipub/views/audio_book.dart';
-import 'package:flipub/views/linear_pogress_listener.dart';
+import 'package:flipub/providers/preferences/preferences_provider.dart';
+import 'package:flipub/presentation/chapter/audio_book.dart';
+import 'package:flipub/presentation/chapter/linear_pogress_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';

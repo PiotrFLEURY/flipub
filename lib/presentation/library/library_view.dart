@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:epubx/epubx.dart' show EpubBook;
 import 'package:flipub/data/book_library.dart';
-import 'package:flipub/providers/book_provider.dart';
-import 'package:flipub/providers/library_provider.dart';
-import 'package:flipub/providers/theme_provider.dart';
-import 'package:flipub/views/book_cover.dart';
-import 'package:flipub/views/book_view.dart';
+import 'package:flipub/providers/epub/book_provider.dart';
+import 'package:flipub/providers/epub/library_provider.dart';
+import 'package:flipub/providers/theme/theme_provider.dart';
+import 'package:flipub/presentation/book/book_cover.dart';
+import 'package:flipub/presentation/book/book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
