@@ -1,10 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:epubx/epubx.dart' show EpubBook;
+import 'package:flipub/providers/epub/cover_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as image;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BookCover extends StatelessWidget {
+class BookCover extends ConsumerWidget {
   const BookCover({
     super.key,
     required this.book,
@@ -13,12 +12,10 @@ class BookCover extends StatelessWidget {
   final EpubBook book;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return book.CoverImage != null
         ? Image.memory(
-            Uint8List.fromList(
-              image.encodePng(book.CoverImage!),
-            ),
+            ref.read(bookCoverProvider(book.CoverImage!)),
             width: 200,
             height: 200,
           )
