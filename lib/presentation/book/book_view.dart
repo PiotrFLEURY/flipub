@@ -78,6 +78,7 @@ class _BookViewContentState extends State<_BookViewContent> {
                   flex: 3,
                   child: ChapterView(
                     chapter: chapter!,
+                    onPop: _closeChapter,
                   ),
                 )
               : Container(),
@@ -86,8 +87,14 @@ class _BookViewContentState extends State<_BookViewContent> {
     );
   }
 
+  void _closeChapter() {
+    setState(() {
+      chapter = null;
+    });
+  }
+
   void _onChapterTap(BuildContext context, EpubChapter chapter) {
-    if (isMobile) {
+    if (MediaQuery.of(context).isPortrait) {
       _navigateToChapterView(context, chapter);
     } else {
       setState(() {
