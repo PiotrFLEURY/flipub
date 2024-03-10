@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'book_provider.dart';
+part of 'cover_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookHash() => r'135a77e6abb0a3ce4d542d6ef0f607c547217929';
+String _$bookCoverHash() => r'b5c5eee39bd542992963cf0fc056b69505cd538d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +29,30 @@ class _SystemHash {
   }
 }
 
-/// See also [book].
-@ProviderFor(book)
-const bookProvider = BookFamily();
+/// See also [bookCover].
+@ProviderFor(bookCover)
+const bookCoverProvider = BookCoverFamily();
 
-/// See also [book].
-class BookFamily extends Family<AsyncValue<EpubBook>> {
-  /// See also [book].
-  const BookFamily();
+/// See also [bookCover].
+class BookCoverFamily extends Family<Uint8List> {
+  /// See also [bookCover].
+  const BookCoverFamily();
 
-  /// See also [book].
-  BookProvider call(
-    String path,
+  /// See also [bookCover].
+  BookCoverProvider call(
+    Image coverImage,
   ) {
-    return BookProvider(
-      path,
+    return BookCoverProvider(
+      coverImage,
     );
   }
 
   @override
-  BookProvider getProviderOverride(
-    covariant BookProvider provider,
+  BookCoverProvider getProviderOverride(
+    covariant BookCoverProvider provider,
   ) {
     return call(
-      provider.path,
+      provider.coverImage,
     );
   }
 
@@ -68,88 +68,90 @@ class BookFamily extends Family<AsyncValue<EpubBook>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'bookProvider';
+  String? get name => r'bookCoverProvider';
 }
 
-/// See also [book].
-class BookProvider extends AutoDisposeFutureProvider<EpubBook> {
-  /// See also [book].
-  BookProvider(
-    String path,
+/// See also [bookCover].
+class BookCoverProvider extends AutoDisposeProvider<Uint8List> {
+  /// See also [bookCover].
+  BookCoverProvider(
+    Image coverImage,
   ) : this._internal(
-          (ref) => book(
-            ref as BookRef,
-            path,
+          (ref) => bookCover(
+            ref as BookCoverRef,
+            coverImage,
           ),
-          from: bookProvider,
-          name: r'bookProvider',
+          from: bookCoverProvider,
+          name: r'bookCoverProvider',
           debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product') ? null : _$bookHash,
-          dependencies: BookFamily._dependencies,
-          allTransitiveDependencies: BookFamily._allTransitiveDependencies,
-          path: path,
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$bookCoverHash,
+          dependencies: BookCoverFamily._dependencies,
+          allTransitiveDependencies: BookCoverFamily._allTransitiveDependencies,
+          coverImage: coverImage,
         );
 
-  BookProvider._internal(
+  BookCoverProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.path,
+    required this.coverImage,
   }) : super.internal();
 
-  final String path;
+  final Image coverImage;
 
   @override
   Override overrideWith(
-    FutureOr<EpubBook> Function(BookRef provider) create,
+    Uint8List Function(BookCoverRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: BookProvider._internal(
-        (ref) => create(ref as BookRef),
+      override: BookCoverProvider._internal(
+        (ref) => create(ref as BookCoverRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        path: path,
+        coverImage: coverImage,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<EpubBook> createElement() {
-    return _BookProviderElement(this);
+  AutoDisposeProviderElement<Uint8List> createElement() {
+    return _BookCoverProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is BookProvider && other.path == path;
+    return other is BookCoverProvider && other.coverImage == coverImage;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, path.hashCode);
+    hash = _SystemHash.combine(hash, coverImage.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin BookRef on AutoDisposeFutureProviderRef<EpubBook> {
-  /// The parameter `path` of this provider.
-  String get path;
+mixin BookCoverRef on AutoDisposeProviderRef<Uint8List> {
+  /// The parameter `coverImage` of this provider.
+  Image get coverImage;
 }
 
-class _BookProviderElement extends AutoDisposeFutureProviderElement<EpubBook>
-    with BookRef {
-  _BookProviderElement(super.provider);
+class _BookCoverProviderElement extends AutoDisposeProviderElement<Uint8List>
+    with BookCoverRef {
+  _BookCoverProviderElement(super.provider);
 
   @override
-  String get path => (origin as BookProvider).path;
+  Image get coverImage => (origin as BookCoverProvider).coverImage;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

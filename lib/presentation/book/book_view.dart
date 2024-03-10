@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookView extends ConsumerWidget {
-  final String bookFileName;
+  final String bookPath;
 
   const BookView({
     super.key,
-    required this.bookFileName,
+    required this.bookPath,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<EpubBook> book = ref.watch(bookProvider(bookFileName));
+    final AsyncValue<EpubBook> book = ref.watch(bookProvider(bookPath));
     return book.when(
       data: (EpubBook book) {
         return _BookViewContent(

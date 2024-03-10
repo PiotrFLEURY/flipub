@@ -1,7 +1,7 @@
 class BookLibrary {
   const BookLibrary({
-    required this.bookFileNames,
+    required this.bookPathList,
   });
 
-  final List<String> bookFileNames;
+  final List<String> bookPathList;
 }
