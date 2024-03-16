@@ -6,7 +6,7 @@ part of 'cover_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookCoverHash() => r'b5c5eee39bd542992963cf0fc056b69505cd538d';
+String _$bookCoverHash() => r'f7432ff9a2994efe0522648c31c78b074e34df09';
 
 /// Copied from Dart SDK
 class _SystemHash {
