@@ -1,7 +1,7 @@
 import 'package:epubx/epubx.dart';
-import 'package:flipub/data/constants.dart';
 import 'package:flipub/providers/epub/book_provider.dart';
 import 'package:flipub/presentation/chapter/chapter_view.dart';
+import 'package:flipub/providers/epub/current_chapter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,6 +19,7 @@ class BookView extends ConsumerWidget {
     return book.when(
       data: (EpubBook book) {
         return _BookViewContent(
+          bookPath: bookPath,
           book: book,
         );
       },
@@ -34,19 +35,38 @@ class BookView extends ConsumerWidget {
   }
 }
 
-class _BookViewContent extends StatefulWidget {
+class _BookViewContent extends ConsumerStatefulWidget {
+  final String bookPath;
   final EpubBook book;
 
   const _BookViewContent({
+    required this.bookPath,
     required this.book,
   });
 
   @override
-  State<_BookViewContent> createState() => _BookViewContentState();
+  ConsumerState<_BookViewContent> createState() => _BookViewContentState();
 }
 
-class _BookViewContentState extends State<_BookViewContent> {
+class _BookViewContentState extends ConsumerState<_BookViewContent> {
   EpubChapter? chapter;
+
+  @override
+  void initState() {
+    super.initState();
+    _initCurrentChapter();
+  }
+
+  Future<void> _initCurrentChapter() async {
+    final currentChapter =
+        await ref.read(currentChapterProvider(widget.bookPath).future);
+    if (currentChapter != 0) {
+      final chapter = widget.book.Chapters![currentChapter - 1];
+      setState(() {
+        this.chapter = chapter;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +74,16 @@ class _BookViewContentState extends State<_BookViewContent> {
       appBar: AppBar(
         title: Text(widget.book.Title ?? 'Unknown title'),
       ),
-      body: Row(
-        children: [
-          Flexible(
-            child: ListView.builder(
+      body: chapter == null
+          ? ListView.builder(
               itemCount: widget.book.Chapters?.length ?? 0,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () =>
-                      _onChapterTap(context, widget.book.Chapters![index]),
+                  onTap: () => _onChapterTap(
+                    context,
+                    index + 1,
+                    widget.book.Chapters![index],
+                  ),
                   child: ListTile(
                     selected: chapter == widget.book.Chapters![index],
                     title: Text(
@@ -71,19 +92,13 @@ class _BookViewContentState extends State<_BookViewContent> {
                   ),
                 );
               },
+            )
+          : ChapterView(
+              bookPath: widget.bookPath,
+              chapterNumber: widget.book.Chapters!.indexOf(chapter!) + 1,
+              chapter: chapter!,
+              onPop: _closeChapter,
             ),
-          ),
-          !isMobile && chapter != null
-              ? Expanded(
-                  flex: 3,
-                  child: ChapterView(
-                    chapter: chapter!,
-                    onPop: _closeChapter,
-                  ),
-                )
-              : Container(),
-        ],
-      ),
     );
   }
 
@@ -93,21 +108,13 @@ class _BookViewContentState extends State<_BookViewContent> {
     });
   }
 
-  void _onChapterTap(BuildContext context, EpubChapter chapter) {
-    if (MediaQuery.of(context).isPortrait) {
-      _navigateToChapterView(context, chapter);
-    } else {
-      setState(() {
-        this.chapter = chapter;
-      });
-    }
-  }
-
-  void _navigateToChapterView(BuildContext context, EpubChapter chapter) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChapterView(chapter: chapter),
-      ),
-    );
+  void _onChapterTap(
+    BuildContext context,
+    int chapterNumber,
+    EpubChapter chapter,
+  ) {
+    setState(() {
+      this.chapter = chapter;
+    });
   }
 }
