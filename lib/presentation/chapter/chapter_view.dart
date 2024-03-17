@@ -6,6 +6,8 @@ import 'package:flipub/data/constants.dart';
 import 'package:flipub/providers/preferences/preferences_provider.dart';
 import 'package:flipub/presentation/chapter/audio_book.dart';
 import 'package:flipub/presentation/chapter/linear_pogress_listener.dart';
+import 'package:flipub/providers/progress/chapter_progress_provider.dart';
+import 'package:flipub/providers/progress/progress_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -15,10 +17,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ChapterView extends ConsumerWidget {
   const ChapterView({
     super.key,
+    required this.bookPath,
+    required this.chapterNumber,
     required this.chapter,
     this.onPop,
   });
 
+  final String bookPath;
+  final int chapterNumber;
   final EpubChapter chapter;
   final void Function()? onPop;
 
@@ -28,6 +34,8 @@ class ChapterView extends ConsumerWidget {
     return preferences.when(
       data: (sharedPreferences) {
         return _ChapterViewInternal(
+          bookPath: bookPath,
+          chapterNumber: chapterNumber,
           chapter: chapter,
           sharedPreferences: sharedPreferences,
           onPop: onPop,
@@ -46,11 +54,15 @@ class ChapterView extends ConsumerWidget {
 
 class _ChapterViewInternal extends ConsumerStatefulWidget {
   const _ChapterViewInternal({
+    required this.bookPath,
+    required this.chapterNumber,
     required this.chapter,
     required this.sharedPreferences,
     this.onPop,
   });
 
+  final String bookPath;
+  final int chapterNumber;
   final EpubChapter chapter;
   final SharedPreferences sharedPreferences;
   final void Function()? onPop;
@@ -68,6 +80,7 @@ class _ChapterViewState extends ConsumerState<_ChapterViewInternal>
 
   double _toolbarOpacity = 1;
   late Timer _toolbarTimer;
+  late Timer _progressTimer;
 
   @override
   void initState() {
@@ -80,8 +93,25 @@ class _ChapterViewState extends ConsumerState<_ChapterViewInternal>
       final currentScroll = scrollController.position.pixels;
       final newProgress = currentScroll / maxScroll;
       progressController.onProgress(newProgress);
+      progress = newProgress;
     });
     _toolbarTimer = Timer(const Duration(seconds: 2), _hideToolbar);
+    _progressTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      ref.read(progressProvider(widget.bookPath).notifier).onProgress(
+            path: widget.bookPath,
+            chapter: widget.chapterNumber,
+            chapterProgress: progress,
+          );
+    });
+    _initProgress();
+  }
+
+  Future<void> _initProgress() async {
+    final currentProgress =
+        await ref.read(chapterProgressProvider(widget.bookPath).future);
+    scrollController.jumpTo(
+      currentProgress * scrollController.position.maxScrollExtent,
+    );
   }
 
   void _showToolbar() {
@@ -99,6 +129,7 @@ class _ChapterViewState extends ConsumerState<_ChapterViewInternal>
   @override
   void dispose() {
     _toolbarTimer.cancel();
+    _progressTimer.cancel();
     super.dispose();
   }
 

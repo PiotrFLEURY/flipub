@@ -7,7 +7,7 @@ part of 'library_provider.dart';
 // **************************************************************************
 
 String _$bookLibraryNotifierHash() =>
-    r'7b81e610c0e03be09f6e2de945f3f3a9ad68ecca';
+    r'e7ac37ec0f1d6e93dbc705485a1b02d6b25bb265';
 
 /// See also [BookLibraryNotifier].
 @ProviderFor(BookLibraryNotifier)

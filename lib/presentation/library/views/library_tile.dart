@@ -2,6 +2,7 @@ import 'package:epubx/epubx.dart';
 import 'package:flipub/data/constants.dart';
 import 'package:flipub/presentation/book/book_cover.dart';
 import 'package:flipub/presentation/book/book_view.dart';
+import 'package:flipub/presentation/library/views/book_progress_view.dart';
 import 'package:flipub/providers/epub/book_provider.dart';
 import 'package:flipub/providers/epub/library_provider.dart';
 import 'package:flutter/material.dart';
@@ -109,6 +110,9 @@ class _LibraryTileContentState extends ConsumerState<_LibraryTileContent> {
                 BookCover(book: widget.book),
                 Text(
                   widget.book.Title ?? 'Unknown title',
+                ),
+                BookProgressView(
+                  path: widget.bookPath,
                 ),
               ],
             ),
